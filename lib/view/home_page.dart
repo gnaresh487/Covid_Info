@@ -11,6 +11,7 @@ class HomePage extends StatelessWidget {
     final _covidInfoBloc = BlocProvider.of<CovidInfoBloc>(context);
     _covidInfoBloc.add(const FetchCovidInfo());
     return Scaffold(
+      appBar: AppBar(title: Text('Covid List Countrywide'),),
       body: BlocBuilder<CovidInfoBloc, CovidInfoState>(
         builder: (context, state) {
           debugPrint('state $state');
@@ -23,11 +24,11 @@ class HomePage extends StatelessWidget {
             );
           }
           if (state is CovidInfoLoaded) {
-            covidInfoModel = state.covidInfo;
+            covidInfoModel = state?.covidInfo;
             return ListView.builder(
-                itemCount: covidInfoModel.countries.length,
+                itemCount: covidInfoModel?.countries?.length ?? 0,
                 itemBuilder: (ctx, index) {
-                  final Country country = covidInfoModel.countries[index];
+                  final Country country = covidInfoModel?.countries[index];
                   return Card(
                       margin: const EdgeInsets.only(top: 2.0, bottom: 2.0),
                       elevation: 5,
@@ -38,9 +39,9 @@ class HomePage extends StatelessWidget {
           }
           if (state is CovidInfoUpdate) {
             return ListView.builder(
-                itemCount: covidInfoModel.countries.length,
+                itemCount: covidInfoModel?.countries?.length ?? 0,
                 itemBuilder: (ctx, index) {
-                  final Country country = covidInfoModel.countries[index];
+                  final Country country = covidInfoModel?.countries[index];
                   return Card(
                       margin: const EdgeInsets.only(top: 2.0, bottom: 2.0),
                       elevation: 5,
@@ -58,26 +59,26 @@ class HomePage extends StatelessWidget {
 
 Widget listWidget(Country country, _covidInfoBloc) {
   debugPrint('update called');
-  final bool isClicked = country.isClicked ?? false;
+  final bool isClicked = country?.isClicked ?? false;
   return ListTile(
-    leading: Text(country.countryCode, style: const TextStyle(color: Colors.red, fontSize: 14.0),),
-    title: Text(country.country, style: TextStyle(color: isClicked ? Colors.blueAccent : Colors.black,),),
+    leading: Text(country?.countryCode, style: const TextStyle(color: Colors.red, fontSize: 14.0),),
+    title: Text(country?.country, style: TextStyle(color: isClicked ? Colors.blueAccent : Colors.black,),),
     subtitle: isClicked ? Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const SizedBox(height: 5,),
-        Text('Name of the country : ${country.country.toString()}',
+        Text('Name of the country : ${country?.country?.toString()}',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0, color: isClicked ? Colors.black : Colors.blueAccent),
           textAlign: TextAlign.start,),
         const SizedBox(height: 5,),
-        Text('Total confirmed Cases : ${country.totalConfirmed.toString()}',),
+        Text('Total confirmed Cases : ${country?.totalConfirmed?.toString()}',),
         const SizedBox(height: 5,),
-        Text('No of recoveries : ${country.totalRecovered.toString()}', style: const TextStyle(color: Colors.green),),
+        Text('No of recoveries : ${country?.totalRecovered?.toString()}', style: const TextStyle(color: Colors.green),),
         const SizedBox(height: 5,),
-        Text('No of deaths : ${country.totalDeaths.toString()}',style: const TextStyle(color: Colors.red),),
+        Text('No of deaths : ${country?.totalDeaths?.toString()}',style: const TextStyle(color: Colors.red),),
     ],) : const Text(''),
     trailing: IconButton(onPressed: () => {
-      country.isClicked = !country.isClicked,
+      country?.isClicked = !country.isClicked,
       _covidInfoBloc.add(UpdateClickedWidget()),
     }, icon: country.isClicked ? const Icon(Icons.keyboard_arrow_up, color: Colors.blueAccent,) : const Icon(Icons.keyboard_arrow_down),),
   );

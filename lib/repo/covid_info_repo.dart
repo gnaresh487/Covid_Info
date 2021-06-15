@@ -12,8 +12,8 @@ class CovidInfoRepo{
 
       final http.StreamedResponse response = await request.send().timeout(const Duration(seconds: 10));
 
-      if (response.statusCode == 200) {
-        final jsonResponse = await response.stream.bytesToString();
+      if (response?.statusCode == 200) {
+        final jsonResponse = await response?.stream?.bytesToString();
         return covidInfoModelFromJson(jsonResponse);
       } else {
         return CovidInfoModel();
