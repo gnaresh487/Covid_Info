@@ -12,6 +12,7 @@ class HomePage extends StatelessWidget {
     _covidInfoBloc.add(const FetchCovidInfo());
     return Scaffold(
       appBar: AppBar(title: Text('Covid List Countrywide'),),
+      floatingActionButton: null,
       body: BlocBuilder<CovidInfoBloc, CovidInfoState>(
         builder: (context, state) {
           debugPrint('state $state');
